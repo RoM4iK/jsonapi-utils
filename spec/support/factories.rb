@@ -1,5 +1,6 @@
-require 'factory_bot'
+require "factory_bot"
 
+FactoryBot.factories.clear
 FactoryBot.define do
   factory :category, class: Category do
     sequence(:title) { |n| "Title for Category #{n}" }
@@ -24,7 +25,9 @@ FactoryBot.define do
     after(:create) { |user| create(:profile, user: user) }
 
     trait :with_posts do
-      transient { post_count 3 }
+      transient do
+        post_count { 3 }
+      end
       after(:create) do |user, e|
         create_list(:post, e.post_count, author: user)
       end
@@ -33,7 +36,7 @@ FactoryBot.define do
 
   factory :profile, class: Profile do
     user
-    sequence(:id)       { |n| n }
+    sequence(:id) { |n| n }
     sequence(:nickname) { |n| "Nickname##{n}" }
     sequence(:location) { |n| "Location##{n}" }
   end
